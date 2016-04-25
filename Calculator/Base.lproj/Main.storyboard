@@ -115,7 +115,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6MH-jI-Yji">
                                 <rect key="frame" x="20" y="79" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="6MH-jI-Yji" secondAttribute="height" multiplier="1:1" id="yla-tC-2Hn"/>
                                 </constraints>
@@ -359,7 +359,7 @@
                             </button>
                             <button opaque="NO" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lCF-fR-NmZ">
                                 <rect key="frame" x="20" y="170" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="lCF-fR-NmZ" secondAttribute="height" multiplier="1:1" id="EsJ-gS-Ifj">
                                         <variation key="widthClass=compact" constant="0.0"/>
@@ -391,7 +391,7 @@
                             </button>
                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tyN-oT-rUF">
                                 <rect key="frame" x="20" y="261" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="tyN-oT-rUF" secondAttribute="height" multiplier="1:1" id="daQ-Gx-OIk">
                                         <variation key="widthClass=compact" constant="0.0"/>
@@ -423,7 +423,7 @@
                             </button>
                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcm-Yx-FCM">
                                 <rect key="frame" x="20" y="352" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="fcm-Yx-FCM" secondAttribute="height" multiplier="1:1" id="nXY-YW-hzi">
                                         <variation key="widthClass=compact" constant="0.0"/>
@@ -455,7 +455,7 @@
                             </button>
                             <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uz2-3M-FFo">
                                 <rect key="frame" x="20" y="443" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Uz2-3M-FFo" secondAttribute="height" multiplier="100:100" id="BYb-GU-p3c">
                                         <variation key="widthClass=compact" constant="0.0"/>
@@ -487,7 +487,7 @@
                             </button>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LzO-9o-vLz">
                                 <rect key="frame" x="20" y="79" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="LzO-9o-vLz" secondAttribute="height" multiplier="1:1" id="JXu-zV-6tH">
                                         <variation key="widthClass=compact" constant="0.0"/>
@@ -536,7 +536,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="byF-Du-0cL">
                                 <rect key="frame" x="20" y="79" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="byF-Du-0cL" secondAttribute="height" multiplier="1:1" id="BP5-18-qzh"/>
                                 </constraints>
@@ -566,7 +566,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tIG-Wa-Ai5">
                                 <rect key="frame" x="20" y="79" width="90" height="90"/>
-                                <color key="backgroundColor" red="0.23289239413285795" green="0.96863162878787878" blue="0.70293079500693545" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.24730186782508243" green="0.77738642742974517" blue="0.96863162878787878" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="tIG-Wa-Ai5" secondAttribute="height" multiplier="1:1" id="Z8p-YD-6mb"/>
                                 </constraints>

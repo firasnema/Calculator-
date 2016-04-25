@@ -12,18 +12,14 @@ class ViewController: UIViewController {
     
     var isTypingNumber = false
     var operantion = ""
-    var userInTheMiddleOFTyping = true
     var isFirstNumberTapped  = false
-    var isSecondNumberTapped = false
+    
     
     var numEntered : String = "0"
     
     var userIsInTheMiddleOfDoingCalculation = false
     var isCalculationOperationSignTapped = false
-    var isNewOperationSignTapped = false
     
-    var operationSign: String = ""
-    var signTapped = false
     var isNotFinishedCalculation = false
     
     var equalButtonTapped = false
@@ -35,7 +31,6 @@ class ViewController: UIViewController {
     var isPecentTapped = false
     
     var isNumFormDisplay = false
-    
     
     
     var calculation = Calculations()
@@ -94,12 +89,12 @@ class ViewController: UIViewController {
         performButtonAnimation(sender)
         
         isNumFormDisplay = false
-        isSecondNumberTapped = true
         numEntered = sender.currentTitle!
         userIsInTheMiddleOfDoingCalculation = true
         isOperationTapped = false
         isFirstNumberTapped = true
-        //  self.calculatorDisplay.text! = sender.currentTitle!
+        
+
         
         if clearTapped.currentTitle == "AC" {
             clearTapped.setTitle("C", forState: UIControlState.Normal)
@@ -202,8 +197,6 @@ class ViewController: UIViewController {
         performButtonAnimation(sender)
         isTypingNumber = false
         isNotFinishedCalculation = true
-        isSecondNumberTapped = false
-        
         
         
         // user must type a number, otherwis jumb, ignor that operation pressed again and again
@@ -433,7 +426,7 @@ class ViewController: UIViewController {
 
 
 private func performButtonAnimation(sender : UIButton) -> UIButton {
-    sender.transform = CGAffineTransformMakeScale(0.95, 0.95)
+    sender.transform = CGAffineTransformMakeScale(0.93, 0.93)
     UIView.animateWithDuration(2.0,
                                delay: 0,
                                usingSpringWithDamping: 0.9,

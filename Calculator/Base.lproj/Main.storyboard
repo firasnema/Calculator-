@@ -591,7 +591,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="percentsignTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YSN-kV-ByF"/>
+                                    <action selector="percentsignTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gcS-rR-g9j"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="30" translatesAutoresizingMaskIntoConstraints="NO" id="I6u-Eq-KbK">

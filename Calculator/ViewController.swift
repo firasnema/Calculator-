@@ -19,9 +19,10 @@ class ViewController: UIViewController {
     var numEntered : String = "0"
     
     var userIsInTheMiddleOfDoingCalculation = false
-    var isOperationTapped = false
+    var isCalculationOperationSignTapped = false
+    var isNewOperationSignTapped = false
     
-    var lastOperationTapped: String = ""
+    var operationSign: String = ""
     var signTapped = false
     var isNotFinishedCalculation = false
     
@@ -29,6 +30,11 @@ class ViewController: UIViewController {
     
     var buttonTapped : Int = 0
     
+    var isOperationTapped = false
+    
+    var isPecentTapped = false
+    
+    var isNumFormDisplay = false
     
     
     
@@ -62,7 +68,7 @@ class ViewController: UIViewController {
         }else {
             
             calculatorDisplay.text = "0"
-            
+            isCalculationOperationSignTapped = false
             do{
                 try calculation.clear()}
             catch {ErrorOcurred.Obvious(" Error occured while trying to empty array")}
@@ -86,12 +92,13 @@ class ViewController: UIViewController {
         
         
         performButtonAnimation(sender)
-        isFirstNumberTapped = true
+        
+        isNumFormDisplay = false
         isSecondNumberTapped = true
         numEntered = sender.currentTitle!
         userIsInTheMiddleOfDoingCalculation = true
-        
-        
+        isOperationTapped = false
+        isFirstNumberTapped = true
         //  self.calculatorDisplay.text! = sender.currentTitle!
         
         if clearTapped.currentTitle == "AC" {
@@ -111,9 +118,7 @@ class ViewController: UIViewController {
             
             if self.calculatorDisplay.text!.containsString(",")  && numEntered == "," {
                 self.calculatorDisplay.text = "0" + numEntered
-                do {
-                    try calculation.clear()}
-                catch {ErrorOcurred.Obvious("Error ocurred while calling method clear")}
+                
             }else {
                 self.calculatorDisplay.text =  numEntered
             }
@@ -133,7 +138,7 @@ class ViewController: UIViewController {
         var result : String = ""
         isTypingNumber = false
         performButtonAnimation(sender)
-        
+        isPecentTapped = true
         
         // jumb over and do nothing if user tapped only percent buttom without number before
         guard isFirstNumberTapped else {
@@ -155,7 +160,7 @@ class ViewController: UIViewController {
         catch {ErrorOcurred.Obvious("Error occured while calling enterValue method, when precent sign tapped")}
         
         
-        // make sure that calculation is acheived
+        // make sure that calculation is acheived when the user pressed a number and thereafter percent sign
         guard isNotFinishedCalculation else  {
             print("calculatin is not done")
             
@@ -166,31 +171,29 @@ class ViewController: UIViewController {
             calculatorDisplay.text = "\(result)"
             print ("Percentage calculation based on ONE value")
             
+            userIsInTheMiddleOfDoingCalculation = false
+            isCalculationOperationSignTapped = true
             return
         }
         
-        guard isOperationTapped && !isSecondNumberTapped else {
-            print ("Percentage calculation based on ONE value")
+        
+        // calculate percentage of a number when user pressed some things like 2 + 4% (of 2), then use the arry of the entered value and
+        guard isCalculationOperationSignTapped else {
+            
             return
         }
         
-        // if we come from some things like pct(2 x 4) , then use the arry of the entered value and
-        do {
-            try calculation.operate(OperationIndex.FirstIndex) }    //first index in the array
-        catch {
-            ErrorOcurred.Obvious("Error occured while calling enterValue method, when precent sign tapped")
-        }
         
         do {
             try result = calculation.operate(OperationIndex.LastIndex) }  //last index in the array
         catch {
             ErrorOcurred.Obvious("Error occured while calling enterValue method, when precent sign tapped")
         }
-        
         print ("Percentage calculation based on TWO value")
         
         calculatorDisplay.text = "\(result)"
         isNotFinishedCalculation = false
+        isOperationTapped = true
         
     }
     
@@ -203,15 +206,8 @@ class ViewController: UIViewController {
         
         
         
-        //-----------------------------------------
-        
-        // User is in the first part of calculation
-        
-        //-----------------------------------------
-        
-        
         // user must type a number, otherwis jumb, ignor that operation pressed again and again
-        guard isFirstNumberTapped else {
+        guard  isFirstNumberTapped else {
             
             print("you have to tap a number")
             return
@@ -226,15 +222,14 @@ class ViewController: UIViewController {
         
         // use lastOperationTapped when calculation require substracting value from itself, in case of pressing equal sig without chosing another number to substract.
         
-        lastOperationTapped = sender.currentTitle!
         
-        //make sure that user is in the middle og doing calculaiton
+        //when user in the meddile of doing calculation
         
         guard userIsInTheMiddleOfDoingCalculation else {
             userIsInTheMiddleOfDoingCalculation = false
             
             do {
-                try calculation.enterOperation(sender.currentTitle!)}
+                try calculation.updateOperationWith(sender.currentTitle!)}
             catch {ErrorOcurred.Obvious("Error occured while entering calling enterOperation method, when operation tapped")
             }
             
@@ -242,6 +237,45 @@ class ViewController: UIViewController {
             
             return
         }
+        
+        // make sure that the operation stack is updated if the user has changed operation sign
+        guard isFirstNumberTapped && !isOperationTapped else {
+            
+            
+            // update operation stack
+            do { try calculation.updateOperationWith(sender.currentTitle!)} catch {
+                
+                ErrorOcurred.Obvious("Error occured while updating operation with new operation sign")
+            }
+            
+            
+            // make sure that percentage is calculated here
+            
+            switch sender.currentTitle! {
+            case "×" , "÷" :
+                
+                
+                break
+                
+            case "-" , "+" :
+                if isPecentTapped {
+                    isPecentTapped = false
+                    //call method with an argument that is the first index in the operationStack
+                    do {
+                        self.calculatorDisplay.text =  try calculation.operate(OperationIndex.FirstIndex)}
+                    catch {
+                        ErrorOcurred.Obvious("Error occured while entering calling operate method, when operation tapped")
+                    }
+                }
+                break
+            default:
+                break
+            }
+            
+            
+            return
+        }
+        
         
         //if user in the meddle of doing calculaiton, then go ahead and save operation sig and value
         do {
@@ -255,7 +289,10 @@ class ViewController: UIViewController {
         
         
         // put equal button to be true, making operation button to work like equal botton
+        
         equalButtonTapped = true
+        isFirstNumberTapped  = true
+        isOperationTapped = true
         
         //-------------------------------------
         
@@ -263,13 +300,16 @@ class ViewController: UIViewController {
         
         //-------------------------------------
         
+        
         // make sure that calculation is not occured when typing operation at the first time
         //do calculation only if operation sign and value tapped
-        guard isOperationTapped && isFirstNumberTapped else {
+        
+        guard isCalculationOperationSignTapped && isFirstNumberTapped else {
             
             //next time do not enter operation sign and value to the array
-            isOperationTapped = true
-            //numTapped = true
+            isCalculationOperationSignTapped = true
+            
+            
             
             //user is now out of the middle of doing calculaiton
             userIsInTheMiddleOfDoingCalculation = true
@@ -278,11 +318,15 @@ class ViewController: UIViewController {
             return
         }
         
+        
+        
         //if equal not tapped before, then jumb to the next level, calculating the entered values
         guard equalButtonTapped else {
             print("Coming from equal sign")
+            
             return
         }
+        
         
         //call method with an argument that is the first index in the operationStack
         do {
@@ -290,7 +334,6 @@ class ViewController: UIViewController {
         catch {
             ErrorOcurred.Obvious("Error occured while entering calling operate method, when operation tapped")
         }
-        
         
     }
     
@@ -300,11 +343,11 @@ class ViewController: UIViewController {
         performButtonAnimation(sender)
         userIsInTheMiddleOfDoingCalculation = false
         isTypingNumber = false
-        isFirstNumberTapped = false
+        //isFirstNumberTapped = false
         
         
         //when pressing equl sign, otherwise reset the desplay, removing comma
-        guard isOperationTapped else {
+        guard isCalculationOperationSignTapped else {
             
             //remove "," if it not important
             if numEntered == "," {
@@ -312,36 +355,79 @@ class ViewController: UIViewController {
                     self.calculatorDisplay.text = try calculation.treatDisplayNumber(self.calculatorDisplay.text!)}
                 catch {ErrorOcurred.Obvious("Error occured while calling method treatDisplayNumber")}
                 
-                //                self.calculatorDisplay.text = self.calculatorDisplay.text?.stringByReplacingOccurrencesOfString(",",                  withString: "")
             }
             return
         }
         
         // In case of user presses "," ,instead use zero as an argument
         
-        
         if numEntered == "," {
-            numEntered = "0"
+            self.calculatorDisplay.text! = "0"
         }
         
         //make sure to save value and operation sign, next time user pressing an operation button
         equalButtonTapped = true
-        isFirstNumberTapped = true
         
+        guard isFirstNumberTapped == true else {
+            
+            return
+        }
+        
+        guard !isPecentTapped else {
+            
+            
+            guard isNumFormDisplay else {
+                
+                isNumFormDisplay = true
+                
+                numEntered = self.calculatorDisplay.text!
+                
+                do {
+                    isOperationTapped = true
+                    self.calculatorDisplay.text = try calculation.operate(OperationIndex.FirstIndex)} catch {
+                        ErrorOcurred.Obvious("Error occured while entering calling operate method, when operation tapped")
+                }
+                do {
+                    try calculation.enterValue(numEntered)}
+                catch {ErrorOcurred.Obvious("Error occured while entering calling enterValue method, when operation tapped")}
+                
+                // calculation.operationStack.removeLast()
+                
+                return
+            }
+            
+            
+            do {
+                isOperationTapped = true
+                self.calculatorDisplay.text = try calculation.operate(OperationIndex.FirstIndex)} catch {
+                    ErrorOcurred.Obvious("Error occured while entering calling operate method, when operation tapped")
+            }
+            
+            do {
+                try calculation.enterValue(numEntered)}
+            catch {ErrorOcurred.Obvious("Error occured while entering calling enterValue method, when operation tapped")}
+            
+            return
+        }
         
         // enter value and operation into their arrays, and perform calculaiton using them
-        do {
-            try calculation.enterValue(numEntered)}
-        catch {ErrorOcurred.Obvious("Error occured while entering calling enterValue method, when operation tapped")}
         
-        do {
-            try calculation.enterOperation(lastOperationTapped)}
-        catch {ErrorOcurred.Obvious("Error occured while entering calling enterValue method, when operation tapped")}
+        if !isNumFormDisplay  {
+            isNumFormDisplay = true
+            do {
+                try calculation.userChangedOperationValue(self.calculatorDisplay.text!)}
+            catch {ErrorOcurred.Obvious("Error occured while entering calling enterValue method, when operation tapped")}
+            
+            
+        }
+        
         
         do {
             self.calculatorDisplay.text = try calculation.operate(OperationIndex.FirstIndex)} catch {
                 ErrorOcurred.Obvious("Error occured while entering calling operate method, when operation tapped")
         }
+        
+        
     }
 }
 

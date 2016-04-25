@@ -18,16 +18,16 @@ enum ErrorOcurred: ErrorType {
 enum OperationIndex {
     case FirstIndex
     case LastIndex
-
+    
 }
 
 
 //implementation of protocol
- protocol calculationMethods {
+protocol calculationMethods {
     
     func operate(index:OperationIndex) throws -> String
     func performOperation(operation: (Double, Double) -> Double) throws -> String
-    func calculatepercentage(operation: Double -> Double) throws -> String
+    func calculatepercentage(operation: (Double, Double) -> Double) throws -> String
     func clear() throws
     func enterValue(displayValue:Double) throws
     func convertToDoubleValue(value: String) throws -> Double
@@ -35,61 +35,68 @@ enum OperationIndex {
 }
 
 class Calculations : calculationMethods {
-
+    
     var operandStack = [Double]()
     var operationStack = [String]()
     
-
+    
     
     func operate(index: OperationIndex) throws -> String {
         
         var result: String = ""
         var operation: String = ""
         
+        if operationStack.count > 2 {
+            operationStack.removeFirst()
+        }
+        
+        print("operand Stack before updating = ", operandStack )
+        
         switch index {
         case  .FirstIndex :
             // make sure that operation stack contains only last two operation signs entered e.g [2.0 , 56.0]
-            if operationStack.count > 2 {
-                operationStack.removeFirst()
-            }
+            
             // take the operation sign entered
-            operation =  operationStack.removeFirst()
+            operation =  operationStack[0]
             
             break
             
         case  .LastIndex :
-            operation =   operationStack.removeFirst()
+            operation =   operationStack[1]
             break
         }
         
-        if operandStack.count < 2  {
-            
-            print("need to enter one more digit, digits now : ",  operandStack.count)
-            
-        }
         
         
-        
-        print("OperationStack = ", operationStack )
-
         
         // The last operation entered used here
         
         switch operation {
         case "×":
             do { result = try performOperation { $0 * $1 }}
-        catch {ErrorOcurred.Obvious("Muliplying func catched an error")}
+            catch {ErrorOcurred.Obvious("Muliplying func catched an error")}
         case "÷":
-            do { result = try performOperation { $1 / $0 }}
-        catch {ErrorOcurred.Obvious("Division func catched an error")}
+            do { result = try performOperation { $0 / $1 }}
+            catch {ErrorOcurred.Obvious("Division func catched an error")}
         case "+":
             do { result = try performOperation { $0 + $1 }}
-        catch {ErrorOcurred.Obvious("adding func catched an error")}
+            catch {ErrorOcurred.Obvious("adding func catched an error")}
         case "-":
-            do {result = try performOperation { $1 - $0 }}
-        catch {"Substacting func catched an error"}
+            do {result = try performOperation { $0 - $1 }}
+            catch {"Substacting func catched an error"}
         case "%":
-            do {result = try calculatepercentage{$0}} catch {}
+            switch operationStack[0] {
+            case "+" , "-":
+                do {result = try calculatepercentage{ $0 * $1 / 100}} catch {}
+                break
+                
+            case "÷" , "×" :
+                do {result = try calculatepercentageOfANumber{ $0 * $1 / 100}} catch {}
+                break
+            default:
+                do {result = try calculatepercentageOfANumber{ $0 * $1 / 100}} catch {}
+                break
+            }
             
         default: break
         }
@@ -97,23 +104,47 @@ class Calculations : calculationMethods {
         return result
     }
     
-     func performOperation(operation: (Double, Double) -> Double) throws ->  String {
+    func performOperation(operation: (Double, Double) -> Double) throws ->  String {
         var result : Double = 0.0
         
-        //  if operandStack.count >= 2 {
+        let value =  operandStack[1]
+        guard operandStack.count > 2 else {
+            
+            result = operation(operandStack.removeFirst(), operandStack.removeLast())
+            
+            enterValue(result)
+            enterValue(value)
+            
+            return try convertDotToComma(result)
+        }
+        
         result = operation(operandStack.removeLast(), operandStack.removeLast())
         
         enterValue(result)
-        print("result is : ", result)
         
-        //   }
+        
         return try convertDotToComma(result)
     }
     
-        func calculatepercentage(operation: Double -> Double) throws -> String {
+    func calculatepercentage(operation: (Double, Double )-> Double) throws -> String {
         var result : Double = 0.0
-        result = operation(operandStack.removeLast() / 100)
-        // enterValue(result)
+        
+        // calculate percentage of a number e.g  5 + 9%, otherwise calculate percentage of the number
+        
+        result = operation(operandStack[0], operandStack[1] )
+        updateValue(result)
+        print("new value is updated :", operandStack)
+        return try convertDotToComma(result)
+    }
+    
+    func calculatepercentageOfANumber(operation: (Double, Double )-> Double) throws -> String  {
+        var result : Double = 0.0
+        
+        // calculate percentage of a number e.g  5 + 9%, otherwise calculate percentage of the number
+        
+        result = operation(1.0 , operandStack[1])
+        updateValue(result)
+        print("new value is updated :", operandStack)
         return try convertDotToComma(result)
     }
     
@@ -131,14 +162,25 @@ class Calculations : calculationMethods {
         
         //append new value
         operationStack.append(operation)
-
-        print("operation entered = ", "\(operationStack)" )
+        print("Operation entered: ", operationStack)
     }
     
-     func enterValue(displayValue : Double) {
+    func updateValue(value:Double) -> Double {
+        
+        guard operandStack.count > 1 else {
+            operandStack[0] = value
+            return operandStack[0]
+        }
+        operandStack[1] = value
+        return operandStack[1]
+        
+    }
+    
+    func enterValue(displayValue : Double) {
         
         operandStack.append(displayValue)
-        print("operandStack = \(operandStack)")
+        updateValue(displayValue)
+        print("operand Stack entered value  = \(operandStack)")
         
     }
     
@@ -150,7 +192,25 @@ class Calculations : calculationMethods {
         enterValue(value)
     }
     
-      func convertToDoubleValue(value: String)  throws-> Double {
+    func userChangedOperationValue(value: String) throws -> Bool {
+        
+        let displayValue  = value.stringByReplacingOccurrencesOfString(",", withString: ".")
+        
+        operandStack.append( Double(displayValue)!)
+        guard Double(displayValue) != operandStack[1] else {
+            
+            return false
+        }
+        
+        operandStack.removeAtIndex(1)
+        // operandStack[1] = Double(displayValue)!
+        
+        print("user has chanaged operation value")
+        return true
+    }
+    
+    
+    func convertToDoubleValue(value: String)  throws-> Double {
         
         let display = value.stringByReplacingOccurrencesOfString(",", withString: ".")
         
@@ -158,19 +218,37 @@ class Calculations : calculationMethods {
         return (display as NSString).doubleValue
     }
     
+    func updateOperationWith(newOperation: String) throws {
+        
+        operationStack.append(newOperation)
+        
+        guard operationStack.count > 1 else {
+            
+            print("Operation stack updated: ", operationStack)
+            return
+        }
+        
+        // removing the element before the last entered element
+        operationStack.removeAtIndex(operationStack.count - 2 )
+        
+        print("Operation stack updated: ", operationStack)
+        
+    }
     
-      func convertDotToComma(numberWithDot: Double) throws -> String {
+    
+    func convertDotToComma(numberWithDot: Double) throws -> String {
         // setup nsnumber formatter to remove zeros after comma
         let formatter = NSNumberFormatter()
         formatter.minimumFractionDigits = 0
         formatter.decimalSeparator = "."
-        //formatter.numberStyle = .DecimalStyle
         formatter.maximumFractionDigits = 20
         formatter.roundingMode = .RoundDown
         formatter.minimumIntegerDigits = 1
+        
         formatter.numberStyle = .NoStyle
         
         let numberStr = String(format: "%.20f", numberWithDot)
+        
         let number = formatter.numberFromString(numberStr)
         
         // put comma insted of dot
